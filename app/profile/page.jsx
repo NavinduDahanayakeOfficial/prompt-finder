@@ -23,7 +23,12 @@ const MyProfile = () => {
          }
       };
 
-      if (status === "authenticated") fetchPosts();
+      if (status === "authenticated") {
+         fetchPosts();
+      } else {
+         router.push("/");
+      }
+      
    }, [session, status]);
 
    const handleEdit = (post) => {
