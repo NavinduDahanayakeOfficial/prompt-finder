@@ -1,7 +1,7 @@
 "use client";
 
 import Form from "@components/Form";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 
@@ -22,20 +22,20 @@ const UpdatePrompt = () => {
       const response = await fetch(`/api/prompt/${promptId}`);
       const data = await response.json();
       setPost({
-            prompt: data.prompt,
-            tag: data.tag,
+         prompt: data.prompt,
+         tag: data.tag,
       });
    };
 
    useEffect(() => {
-      if(promptId) fetchPost();
+      if (promptId) fetchPost();
    }, [promptId]);
 
    const editPrompt = async (e) => {
       e.preventDefault();
       setSubmitting(true);
 
-      if(!promptId) return alert("Prompt not found");
+      if (!promptId) return alert("Prompt not found");
 
       try {
          const response = await fetch(`/api/prompt/${promptId}`, {
@@ -57,13 +57,15 @@ const UpdatePrompt = () => {
    };
 
    return (
-      <Form
-         type="Update"
-         post={post}
-         setPost={setPost}
-         submitting={submitting}
-         handleSubmit={editPrompt}
-      />
+      <Suspense fallback={<div>Loading...</div>}>
+         <Form
+            type="Update"
+            post={post}
+            setPost={setPost}
+            submitting={submitting}
+            handleSubmit={editPrompt}
+         />
+      </Suspense>
    );
 };
 
